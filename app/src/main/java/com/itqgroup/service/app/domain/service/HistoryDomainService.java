@@ -1,6 +1,5 @@
 package com.itqgroup.service.app.domain.service;
 
-import com.itqgroup.service.app.domain.model.DocumentSummary;
 import com.itqgroup.service.app.domain.model.HistorySummary;
 
 import java.util.List;

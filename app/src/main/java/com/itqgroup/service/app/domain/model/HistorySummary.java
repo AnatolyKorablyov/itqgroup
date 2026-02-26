@@ -1,7 +1,6 @@
 package com.itqgroup.service.app.domain.model;
 
 import com.itqgroup.service.api.Action;
-import com.itqgroup.service.api.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

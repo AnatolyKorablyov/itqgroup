@@ -1,11 +1,17 @@
 package com.itqgroup.service.app.domain.service;
 
+import com.itqgroup.service.api.DocumentsParameters;
 import com.itqgroup.service.app.domain.model.DocumentSummary;
-import jakarta.persistence.EntityExistsException;
+import com.itqgroup.service.app.domain.repository.Pagination;
+
+import java.util.List;
 
 public interface DocumentDomainService {
 
     DocumentSummary getById(String id);
+    List<DocumentSummary> getByIds(List<String> ids);
     void create(DocumentSummary summary);
     void submitted(DocumentSummary summary);
+    List<DocumentSummary> findAllByPagination(Pagination pagination);
+    List<DocumentSummary> getByParameters(DocumentsParameters parameters);
 }

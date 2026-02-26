@@ -1,6 +1,8 @@
 package com.itqgroup.service.app.controller;
 
 import com.itqgroup.service.api.DocumentDto;
+import com.itqgroup.service.api.DocumentOutDto;
+import com.itqgroup.service.api.DocumentsParameters;
 import com.itqgroup.service.api.StatusTransferParameters;
 import com.itqgroup.service.app.application.DocumentApplicationService;
 import com.itqgroup.service.app.application.DocumentQueryService;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -30,6 +33,29 @@ public class DocumentController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(path = "/documentById")
+    public ResponseEntity<DocumentOutDto> documentById(@RequestParam String id) {
+        return ResponseEntity.ok(queryService.getDocumentById(id));
+    }
+
+//    @GetMapping(path = "/documentsByIds")
+//    public ResponseEntity<List<DocumentSummary>> getDocuments(@RequestParam List<String> ids) {
+//        return ResponseEntity.ok(queryService.getDocuments(ids));
+//    }
+
+    @GetMapping(path = "/documentsByIds")
+    public ResponseEntity<List<DocumentSummary>> getDocuments(@RequestParam Optional<List<String>> ids,
+                                                              @RequestParam Optional<Integer> offset,
+                                                              @RequestParam Optional<Integer> limit,
+                                                              @RequestParam Optional<String> sortOrder) {
+        return ResponseEntity.ok(queryService.getDocuments(ids, offset, limit, sortOrder));
+    }
+
+    @GetMapping(path = "/documents")
+    public ResponseEntity<List<DocumentSummary>> getDocuments(@RequestParam DocumentsParameters parameters) {
+        return ResponseEntity.ok(queryService.getDocumentsByFilter(parameters));
+    }
+
     @PostMapping(path = "/submitted")
     public ResponseEntity<Object> submitted(@Valid @RequestBody StatusTransferParameters statusTransferParameters) {
         return ResponseEntity.ok(applicationService.submitted(statusTransferParameters));
@@ -40,21 +66,5 @@ public class DocumentController {
         return ResponseEntity.ok(applicationService.approved(statusTransferParameters));
     }
 
-    @GetMapping(path = "/documentById")
-    public ResponseEntity documentById(@RequestParam String id) {
-        return ResponseEntity.ok(queryService.getDocumentById(id));
-    }
-//
-//    @GetMapping(path = "/documentsByIds")
-//    public ResponseEntity<List<DocumentOutDto>> getDocuments(@RequestParam(name="sortOrder", required = false) String sortOrder) {
-//        return ResponseEntity.ok(documentQueryService.getSortedDocuments(initiator, sort, limit, sortOrder));
-//    }
 
-    @GetMapping(path = "/documents")
-    public ResponseEntity<List<DocumentSummary>> getDocuments(@RequestParam(name="initiator", required = false) String initiator,
-                                                              @RequestParam String sort,
-                                                              @RequestParam int limit,
-                                                              @RequestParam(name="sortOrder", required = false) String sortOrder) {
-        return ResponseEntity.ok(queryService.getDocuments());
-    }
 }
