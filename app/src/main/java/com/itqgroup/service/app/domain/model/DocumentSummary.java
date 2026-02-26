@@ -1,6 +1,5 @@
 package com.itqgroup.service.app.domain.model;
 
-import com.itqgroup.service.api.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +29,7 @@ public class DocumentSummary {
   private String title;
 
   @Column(name = "status")
-  private Status status;
+  private String status;
 
   @Column(name = "create_date")
   private Date createDate;

@@ -10,7 +10,7 @@ public class StatusControllerAdvice {
 
   @ExceptionHandler({EntityNotFoundException.class})
   public ResponseEntity<Object> handleQuery() {
-    return ResponseEntity.status(404).body("Event not found by lastId");
+    return ResponseEntity.status(404).body("object not found");
   }
 
 }

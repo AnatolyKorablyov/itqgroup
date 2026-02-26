@@ -17,7 +17,7 @@ public class DocumentOutDto implements Serializable {
   private int number;
   private String author;
   private String title;
-  private Status status;
+  private String status;
   private Date createDate;
   private Date updateDate;
   private List<HistoryOutDto> history;

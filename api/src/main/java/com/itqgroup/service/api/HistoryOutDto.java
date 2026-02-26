@@ -15,7 +15,7 @@ public class HistoryOutDto implements Serializable {
   private String id;
   private String idDocument;
   private String author;
-  private Action action;
+  private String action;
   private String comment;
   private Date date;
 }

@@ -1,6 +1,5 @@
 package com.itqgroup.service.app.domain.model;
 
-import com.itqgroup.service.api.Action;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -28,7 +27,7 @@ public class HistorySummary {
   private String author;
 
   @Column(name = "action")
-  private Action action;
+  private String action;
 
   @Column(name = "comment")
   private String comment;

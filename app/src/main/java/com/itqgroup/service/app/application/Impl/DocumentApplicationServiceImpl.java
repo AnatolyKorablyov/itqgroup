@@ -37,7 +37,7 @@ public class DocumentApplicationServiceImpl implements DocumentApplicationServic
     log.debug(HANDLE_LOG, dto);
     DocumentSummary documentSummary = mapper.map(dto);
     documentSummary.setCreateDate(new Date());
-    documentSummary.setStatus(Status.DRAFT);
+    documentSummary.setStatus(Status.DRAFT.getStatusName());
     documentDomainService.create(documentSummary);
     return dto.getId();
   }
@@ -51,13 +51,13 @@ public class DocumentApplicationServiceImpl implements DocumentApplicationServic
       if (summary == null) {
         agreements.put(id, SubmittedStatus.NOT_FOUND);
       }
-      else if (summary.getStatus() == Status.DRAFT) {
-        summary.setStatus(Status.SUBMITTED);
+      else if (summary.getStatus().equals(Status.DRAFT.toString())) {
+        summary.setStatus(Status.SUBMITTED.getStatusName());
         summary.setUpdateDate(new Date());
         documentDomainService.submitted(summary);
 
         HistorySummary historySummary = getHistorySummary(id, stp.getAuthor(), stp.getComment());
-        historySummary.setAction(Action.SUBMIT);
+        historySummary.setAction(Action.SUBMIT.getStatusName());
         historyDomainService.create(historySummary);
 
         agreements.put(id, SubmittedStatus.SUCCESS);
@@ -78,12 +78,12 @@ public class DocumentApplicationServiceImpl implements DocumentApplicationServic
       if (summary == null) {
         agreements.put(id, ApprovedStatus.NOT_FOUND);
       }
-      else if (summary.getStatus() == Status.SUBMITTED) {
-        summary.setStatus(Status.APPROVED);
+      else if (summary.getStatus().equals(Status.SUBMITTED.toString())) {
+        summary.setStatus(Status.APPROVED.getStatusName());
         summary.setUpdateDate(new Date());
         documentDomainService.submitted(summary);
         HistorySummary historySummary = getHistorySummary(id, stp.getAuthor(), stp.getComment());
-        historySummary.setAction(Action.APPROVE);
+        historySummary.setAction(Action.APPROVE.getStatusName());
         historyDomainService.create(historySummary);
 
         StatementRegisterSummary statementRegisterSummary = new StatementRegisterSummary();

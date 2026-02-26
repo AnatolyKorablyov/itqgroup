@@ -52,7 +52,7 @@ public class DocumentController {
     }
 
     @GetMapping(path = "/documents")
-    public ResponseEntity<List<DocumentSummary>> getDocuments(@RequestParam DocumentsParameters parameters) {
+    public ResponseEntity<List<DocumentSummary>> getDocuments(DocumentsParameters parameters) {
         return ResponseEntity.ok(queryService.getDocumentsByFilter(parameters));
     }
 

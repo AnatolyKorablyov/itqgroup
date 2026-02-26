@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -43,7 +44,9 @@ public class DocumentDomainServiceImpl implements DocumentDomainService {
 
     public List<DocumentSummary> getByParameters(DocumentsParameters parameters) {
         try {
-            return repository.findAllByParameters(parameters.getStatus(), parameters.getAuthor(), parameters.getStart_date(), parameters.getEnd_date());
+            Date startDate = new Date(parameters.getStart_date());
+            Date endDate = new Date(parameters.getEnd_date());
+            return repository.findAllByParameters(parameters.getStatus(), parameters.getAuthor(), startDate, endDate);
         } catch (Exception exception) {
             log.warn("find all entity_instance by pagination Exception: {}", exception);
             return null;
