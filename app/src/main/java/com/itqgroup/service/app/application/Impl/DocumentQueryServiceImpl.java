@@ -73,7 +73,17 @@ public class DocumentQueryServiceImpl implements DocumentQueryService {
             documentOutDto.setHistory(historyOutDtoList);
             return documentOutDto;
         } catch (EntityNotFoundException ex) {
-            log.info("synchronization: document by id not found");
+            log.info("document by id not found");
+            throw ex;
+        }
+    }
+
+    @Override
+    public List<String> getIdsByStatus(String status) {
+        try {
+            return documentDomainService.getIdsByStatus(status);
+        } catch (EntityNotFoundException ex) {
+            log.info("document by status not found");
             throw ex;
         }
     }

@@ -11,6 +11,6 @@ public class DocumentsParameters {
 
   private String author;
   private String status;
-  private long start_date;
-  private long end_date;
+  private long start_date = 0L;
+  private long end_date = 0L;
 }

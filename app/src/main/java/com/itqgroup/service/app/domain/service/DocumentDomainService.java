@@ -10,6 +10,7 @@ public interface DocumentDomainService {
 
     DocumentSummary getById(String id);
     List<DocumentSummary> getByIds(List<String> ids);
+    List<String> getIdsByStatus(String status);
     void create(DocumentSummary summary);
     void submitted(DocumentSummary summary);
     List<DocumentSummary> findAllByPagination(Pagination pagination);

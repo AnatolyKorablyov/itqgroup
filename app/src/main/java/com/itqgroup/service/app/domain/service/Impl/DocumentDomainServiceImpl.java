@@ -33,22 +33,45 @@ public class DocumentDomainServiceImpl implements DocumentDomainService {
         return repository.findAllById(ids);
     }
 
+    @Override
+    public List<String> getIdsByStatus(String status) {
+        return repository.findIdsByStatus(status);
+    }
+
     public List<DocumentSummary> findAllByPagination(Pagination pagination) {
         try {
             return repository.findAll(pagination).getContent();
         } catch (Exception exception) {
-            log.warn("find all entity_instance by pagination Exception: {}", exception);
+            log.warn("find all by pagination Exception: {}", exception);
             return null;
         }
     }
 
     public List<DocumentSummary> getByParameters(DocumentsParameters parameters) {
         try {
-            Date startDate = new Date(parameters.getStart_date());
-            Date endDate = new Date(parameters.getEnd_date());
-            return repository.findAllByParameters(parameters.getStatus(), parameters.getAuthor(), startDate, endDate);
+            if (parameters == null) {
+                return null;
+            }
+            else if (parameters.getStatus() != null && parameters.getAuthor() != null
+                    && parameters.getStart_date() != 0L && parameters.getEnd_date() != 0L) {
+                Date startDate = new Date(parameters.getStart_date());
+                Date endDate = new Date(parameters.getEnd_date());
+                return repository.findAllByParameters(parameters.getStatus(), parameters.getAuthor(), startDate, endDate);
+            }
+            else if (parameters.getStatus() != null) {
+                return repository.findAllByStatus(parameters.getStatus());
+            }
+            else if (parameters.getAuthor() != null) {
+                return repository.findAllByAuthor(parameters.getAuthor());
+            }
+            else if (parameters.getStart_date() != 0L && parameters.getEnd_date() != 0L) {
+                Date startDate = new Date(parameters.getStart_date());
+                Date endDate = new Date(parameters.getEnd_date());
+                return repository.findAllByDates(startDate, endDate);
+            }
+            return null;
         } catch (Exception exception) {
-            log.warn("find all entity_instance by pagination Exception: {}", exception);
+            log.warn("find all by parameters Exception: {}", exception);
             return null;
         }
     }

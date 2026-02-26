@@ -18,4 +18,5 @@ public interface DocumentQueryService {
                                        Optional<String> sortOrder);
 
     DocumentOutDto getDocumentById(String documentId);
+    List<String> getIdsByStatus(String status);
 }
