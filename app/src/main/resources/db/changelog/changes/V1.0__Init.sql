@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS document_summary (
     update_date timestamp without time zone,
     status varchar(255),
     PRIMARY KEY (id)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS history_summary (
     id varchar(255) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS history_summary (
     comment varchar(255),
     date timestamp without time zone,
     PRIMARY KEY (id)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS statement_register_summary (
     id varchar(255) NOT NULL,
@@ -25,4 +25,4 @@ CREATE TABLE IF NOT EXISTS statement_register_summary (
     author varchar(255),
     date timestamp without time zone,
     PRIMARY KEY (id)
-    );
+);
