@@ -16,7 +16,7 @@ abstract class TestContainers {
           .withPassword("secret");
 
   static {
-    POSTGRE_SQL_CONTAINER.withInitScript("db/changelog/changes/v1.0__init.sql");
+//    POSTGRE_SQL_CONTAINER.withInitScript("db/changelog/changes/v1.0__init.sql");
     POSTGRE_SQL_CONTAINER.start();
 
     System.setProperty("spring.datasource.url", POSTGRE_SQL_CONTAINER.getJdbcUrl());

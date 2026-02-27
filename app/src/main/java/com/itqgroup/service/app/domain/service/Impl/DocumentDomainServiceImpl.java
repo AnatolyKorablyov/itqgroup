@@ -7,10 +7,7 @@ import com.itqgroup.service.app.domain.repository.Pagination;
 import com.itqgroup.service.app.domain.service.DocumentDomainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DeadlockLoserDataAccessException;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,7 +97,6 @@ public class DocumentDomainServiceImpl implements DocumentDomainService {
     }
 
     @Override
-    @Retryable(value = {DeadlockLoserDataAccessException.class}, maxAttempts = 3, backoff = @Backoff(delay = 100))
     @Transactional
     public void submitted(DocumentSummary summary){
         try {

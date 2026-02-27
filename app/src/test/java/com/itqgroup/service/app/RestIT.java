@@ -68,11 +68,20 @@ class RestIT extends BaseTest {
     String concurrencyUrl = serviceUrl + concurrencyEndpoint;
     Map<String, List<Map<String, ApprovedStatus>>> statuses = concurrency(concurrencyUrl, concurrencyParameters);
     assertEquals(10, statuses.size());
+    int successful = 0;
+    for (Map.Entry<String, List<Map<String, ApprovedStatus>>> entry : statuses.entrySet()) {
+      for (Map<String, ApprovedStatus> elem : entry.getValue()) {
+        if (elem.get(documentDto.getId()).getStatusName().equals("success")) {
+          successful++;
+        }
+      }
+    }
+    assertEquals(1, successful);
   }
 
-  @DisplayName("get generated documents")
+  @DisplayName("submit 1000 documents")
   @Test
-  void getGeneratedDocuments() {
+  void submit1000Documents() {
     Date startDate = Date.from(new Date().toInstant().minus(5, ChronoUnit.MINUTES));
     Date endDate = new Date();
     Map<String, Object> parameters = new HashMap<>();
@@ -83,7 +92,17 @@ class RestIT extends BaseTest {
     String url = serviceUrl + getDocumentsEndpoint;
 
     List<DocumentSummary> documentSummaries = getDocuments(url, parameters);
-    assertEquals(100, documentSummaries.size());
+    assertEquals(1000, documentSummaries.size());
+    List<String> ids = new ArrayList<>();
+    for (DocumentSummary documentSummary : documentSummaries) {
+      ids.add(documentSummary.getId());
+    }
+    String submitUrl = serviceUrl + submittedEndpoint;
+    StatusTransferParameters stp = new StatusTransferParameters();
+    stp.setIds(ids);
+    stp.setAuthor("Vasya");
+    Map<String, SubmittedStatus> submittedStatusMap = submitted(submitUrl, stp);
+    assertEquals(1000, submittedStatusMap.size());
   }
 
   @DisplayName("create document get with history")
