@@ -1,9 +1,6 @@
 package com.itqgroup.service.app.controller;
 
-import com.itqgroup.service.api.DocumentDto;
-import com.itqgroup.service.api.DocumentOutDto;
-import com.itqgroup.service.api.DocumentsParameters;
-import com.itqgroup.service.api.StatusTransferParameters;
+import com.itqgroup.service.api.*;
 import com.itqgroup.service.app.application.DocumentApplicationService;
 import com.itqgroup.service.app.application.DocumentQueryService;
 import com.itqgroup.service.app.domain.model.DocumentSummary;
@@ -14,7 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -29,12 +29,22 @@ public class DocumentController {
     
     @PostMapping(path = "/document")
     public ResponseEntity<Object> create(@Valid @RequestBody DocumentDto dto) {
-        return ResponseEntity.ok(applicationService.create(dto));
+        Instant start = Instant.now();
+        String id = applicationService.create(dto);
+        Instant end = Instant.now();
+        Duration timeElapsed = Duration.between(start, end);
+        System.out.println("Execution time in milliseconds: " + timeElapsed.toMillis());
+        return ResponseEntity.ok(id);
     }
 
     @GetMapping(path = "/documentById")
     public ResponseEntity<DocumentOutDto> documentById(@RequestParam String id) {
-        return ResponseEntity.ok(queryService.getDocumentById(id));
+        Instant start = Instant.now();
+        DocumentOutDto result = queryService.getDocumentById(id);
+        Instant end = Instant.now();
+        Duration timeElapsed = Duration.between(start, end);
+        System.out.println("Execution time in milliseconds: " + timeElapsed.toMillis());
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping(path = "/documentsByIds")
@@ -42,22 +52,42 @@ public class DocumentController {
                                                               @RequestParam Optional<Integer> offset,
                                                               @RequestParam Optional<Integer> limit,
                                                               @RequestParam Optional<String> sortOrder) {
-        return ResponseEntity.ok(queryService.getDocuments(ids, offset, limit, sortOrder));
+        Instant start = Instant.now();
+        List<DocumentSummary> result = queryService.getDocuments(ids, offset, limit, sortOrder);
+        Instant end = Instant.now();
+        Duration timeElapsed = Duration.between(start, end);
+        System.out.println("Execution time in milliseconds: " + timeElapsed.toMillis());
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping(path = "/documents")
     public ResponseEntity<List<DocumentSummary>> getDocuments(DocumentsParameters parameters) {
-        return ResponseEntity.ok(queryService.getDocumentsByFilter(parameters));
+        Instant start = Instant.now();
+        List<DocumentSummary> result = queryService.getDocumentsByFilter(parameters);
+        Instant end = Instant.now();
+        Duration timeElapsed = Duration.between(start, end);
+        System.out.println("Execution time in milliseconds: " + timeElapsed.toMillis());
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping(path = "/submitted")
     public ResponseEntity<Object> submitted(@Valid @RequestBody StatusTransferParameters statusTransferParameters) {
-        return ResponseEntity.ok(applicationService.submitted(statusTransferParameters));
+        Instant start = Instant.now();
+        Map<String, SubmittedStatus> result = applicationService.submitted(statusTransferParameters);
+        Instant end = Instant.now();
+        Duration timeElapsed = Duration.between(start, end);
+        System.out.println("Execution time in milliseconds: " + timeElapsed.toMillis());
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping(path = "/approved")
     public ResponseEntity<Object> approved(@Valid @RequestBody StatusTransferParameters statusTransferParameters) {
-        return ResponseEntity.ok(applicationService.approved(statusTransferParameters));
+        Instant start = Instant.now();
+        Map<String, ApprovedStatus> result = applicationService.approved(statusTransferParameters);
+        Instant end = Instant.now();
+        Duration timeElapsed = Duration.between(start, end);
+        System.out.println("Execution time in milliseconds: " + timeElapsed.toMillis());
+        return ResponseEntity.ok(result);
     }
 
 

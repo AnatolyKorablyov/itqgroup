@@ -20,6 +20,7 @@ public class GenerationConfiguration {
 
     @Bean
     public GenerationDocumentsUtil generationDocumentsUtil() {
+        log.info("GENERATE DOCUMENTS: {}", GENERATION_DOCUMENT_VALUE);
         return new GenerationDocumentsUtil(SERVICE_URL, GENERATION_DOCUMENT_VALUE);
     }
 }

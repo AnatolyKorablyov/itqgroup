@@ -27,6 +27,7 @@ public class DocumentApplicationServiceImpl implements DocumentApplicationServic
 
   private static final String HANDLE_LOG = "handle dto {}";
   private static final String WARN_LOG = "Exception: {}";
+  private static final String PROCCESSING_LOG = "processing {} in {}";
   private final DocumentDomainService documentDomainService;
   private final HistoryDomainService historyDomainService;
   private final StatementRegisterDomainService statementRegisterDomainService;
@@ -48,7 +49,10 @@ public class DocumentApplicationServiceImpl implements DocumentApplicationServic
   public Map<String, SubmittedStatus> submitted(StatusTransferParameters stp) {
     log.debug(HANDLE_LOG, stp);
     Map<String, SubmittedStatus> agreements = new HashMap<>();
-    for (String id : stp.getIds()) {
+    List<String> ids = stp.getIds();
+    for (int i = 0; i < ids.size(); i++) {
+      String id = ids.get(i);
+      log.info(PROCCESSING_LOG, i + 1, ids.size());
       try {
         DocumentSummary summary = documentDomainService.getById(id);
         if (summary == null) {
@@ -78,8 +82,10 @@ public class DocumentApplicationServiceImpl implements DocumentApplicationServic
   public Map<String, ApprovedStatus> approved(StatusTransferParameters stp) {
     log.debug(HANDLE_LOG, stp);
     Map<String, ApprovedStatus> agreements = new HashMap<>();
-
-    for (String id : stp.getIds()) {
+    List<String> ids = stp.getIds();
+    for (int i = 0; i < ids.size(); i++) {
+      String id = ids.get(i);
+      log.info(PROCCESSING_LOG, i + 1, ids.size());
       try {
         DocumentSummary summary = documentDomainService.getById(id);
         if (summary == null) {
