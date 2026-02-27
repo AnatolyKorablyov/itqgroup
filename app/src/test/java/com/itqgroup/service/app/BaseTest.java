@@ -65,6 +65,19 @@ abstract class BaseTest extends TestContainers {
                 });
     }
 
+    Map<String, List<Map<String, ApprovedStatus>>> concurrency(String url, Object body) {
+        return given()
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .post(url)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .as(new TypeRef<Map<String, List<Map<String, ApprovedStatus>>>>() {
+                });
+    }
+
     DocumentOutDto getDocument(String url, Map<String, ?> parameters) {
         return given()
                 .params(parameters)

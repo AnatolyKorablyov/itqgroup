@@ -21,6 +21,9 @@ public class CronWorkerConfiguration {
     @Value("${application.worker.cron.expression}")
     private String CRON_EXPRESSION;
 
+    @Value("${application.worker.enabled}")
+    private Boolean WORKER_ENABLED;
+
     private final CronJobManager cronJobManager;
 
     @Value("${application.service.url}")
@@ -28,12 +31,18 @@ public class CronWorkerConfiguration {
 
     @Bean
     public ScheduledFuture submitWorker() {
+        if (!WORKER_ENABLED) {
+            return null;
+        }
         String url = SERVICE_URL + "/submitted";
         return cronJobManager.addTaskByStatus(url, Status.DRAFT.toString(), CRON_EXPRESSION, BATCH_SIZE);
     }
 
     @Bean
     public ScheduledFuture approveWorker() {
+        if (!WORKER_ENABLED) {
+            return null;
+        }
         String url = SERVICE_URL + "/approved";
         return cronJobManager.addTaskByStatus(url, Status.SUBMITTED.toString(), CRON_EXPRESSION, BATCH_SIZE);
     }

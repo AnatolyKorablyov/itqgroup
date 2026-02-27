@@ -20,7 +20,7 @@ public class DocumentSummary {
   private String id;
 
   @Column(name = "number")
-  private int number;
+  private long number;
 
   @Column(name = "author")
   private String author;

@@ -21,7 +21,6 @@ public class ConcurrencyController {
     
     @PostMapping(path = "/concurrency")
     public ResponseEntity<Object> create(@Valid @RequestBody ConcurrencyParameters concurrencyParameters) {
-        concurrencyApplicationService.checkConcurrency(concurrencyParameters);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(concurrencyApplicationService.checkConcurrency(concurrencyParameters));
     }
 }

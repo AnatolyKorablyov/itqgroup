@@ -7,6 +7,10 @@ import com.itqgroup.service.app.domain.repository.Pagination;
 import com.itqgroup.service.app.domain.service.DocumentDomainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DeadlockLoserDataAccessException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +25,23 @@ import java.util.List;
 public class DocumentDomainServiceImpl implements DocumentDomainService {
 
     private static final String CMD_LOG = "projecting {}";
+    private static final String WARN_LOG = "Exception {}";
     private final DocumentRepository repository;
 
     @Override
+    @Transactional(readOnly = true)
     public DocumentSummary getById(String id) {
-        return repository.getById(id);
+        try {
+            return repository.getByIdWithLock(id);
+        } catch (Exception e) {
+            log.error(CMD_LOG, e);
+            return null;
+        }
+    }
+
+    @Override
+    public long getCountDocs() {
+        return repository.count();
     }
 
     @Override
@@ -84,9 +100,18 @@ public class DocumentDomainServiceImpl implements DocumentDomainService {
     }
 
     @Override
+    @Retryable(value = {DeadlockLoserDataAccessException.class}, maxAttempts = 3, backoff = @Backoff(delay = 100))
+    @Transactional
     public void submitted(DocumentSummary summary){
-        log.info(CMD_LOG, summary);
-        repository.save(summary);
-        log.debug("SUCCESS SAVE: {}", summary);
+        try {
+            log.info(CMD_LOG, summary);
+            repository.save(summary);
+            log.debug("SUCCESS SAVE: {}", summary);
+        }
+        catch (Exception ex) {
+            log.warn(WARN_LOG, ex);
+        }
+
+
     }
 }

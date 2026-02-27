@@ -9,6 +9,7 @@ import java.util.List;
 public interface DocumentDomainService {
 
     DocumentSummary getById(String id);
+    long getCountDocs();
     List<DocumentSummary> getByIds(List<String> ids);
     List<String> getIdsByStatus(String status);
     void create(DocumentSummary summary);

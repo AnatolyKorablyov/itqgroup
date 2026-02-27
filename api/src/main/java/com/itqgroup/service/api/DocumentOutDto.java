@@ -14,7 +14,7 @@ import java.util.List;
 public class DocumentOutDto implements Serializable {
 
   private String id;
-  private int number;
+  private long number;
   private String author;
   private String title;
   private String status;

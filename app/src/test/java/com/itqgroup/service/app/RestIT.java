@@ -1,9 +1,6 @@
 package com.itqgroup.service.app;
 
-import com.itqgroup.service.api.DocumentDto;
-import com.itqgroup.service.api.DocumentOutDto;
-import com.itqgroup.service.api.DocumentsParameters;
-import com.itqgroup.service.api.StatusTransferParameters;
+import com.itqgroup.service.api.*;
 import com.itqgroup.service.app.domain.model.DocumentSummary;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -45,16 +42,32 @@ class RestIT extends BaseTest {
   private String submittedEndpoint = "/submitted";
   private String approvedEndpoint = "/approved";
   private String documentByIdEndpoint = "/documentById";
+  private String concurrencyEndpoint = "/concurrency";
 
-  @DisplayName("create document")
+  @DisplayName("check approve concurrency")
   @Test
-  void createDocument() {
+  void checkConcurrency() {
     String url = serviceUrl + createDocumentEndpoint;
     DocumentDto documentDto = new DocumentDto();
     documentDto.setId(UUID.randomUUID().toString());
     documentDto.setTitle("title");
     documentDto.setAuthor("author");
     create(url, documentDto);
+    String submitUrl = serviceUrl + submittedEndpoint;
+    StatusTransferParameters stp = new StatusTransferParameters();
+    List<String> ids = new ArrayList<>();
+    ids.add(documentDto.getId());
+    stp.setIds(ids);
+    stp.setAuthor("Vasya");
+    submitted(submitUrl, stp);
+    ConcurrencyParameters concurrencyParameters = new ConcurrencyParameters();
+    concurrencyParameters.setThreads(10);
+    concurrencyParameters.setAttempts(5);
+    concurrencyParameters.setId(documentDto.getId());
+
+    String concurrencyUrl = serviceUrl + concurrencyEndpoint;
+    Map<String, List<Map<String, ApprovedStatus>>> statuses = concurrency(concurrencyUrl, concurrencyParameters);
+    assertEquals(10, statuses.size());
   }
 
   @DisplayName("get generated documents")

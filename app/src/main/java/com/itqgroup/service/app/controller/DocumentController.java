@@ -29,19 +29,13 @@ public class DocumentController {
     
     @PostMapping(path = "/document")
     public ResponseEntity<Object> create(@Valid @RequestBody DocumentDto dto) {
-        applicationService.create(dto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(applicationService.create(dto));
     }
 
     @GetMapping(path = "/documentById")
     public ResponseEntity<DocumentOutDto> documentById(@RequestParam String id) {
         return ResponseEntity.ok(queryService.getDocumentById(id));
     }
-
-//    @GetMapping(path = "/documentsByIds")
-//    public ResponseEntity<List<DocumentSummary>> getDocuments(@RequestParam List<String> ids) {
-//        return ResponseEntity.ok(queryService.getDocuments(ids));
-//    }
 
     @GetMapping(path = "/documentsByIds")
     public ResponseEntity<List<DocumentSummary>> getDocuments(@RequestParam Optional<List<String>> ids,
